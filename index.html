@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">🏫</div>
+            <div class="brand-text">
+                <span class="brand-title">EduManager</span>
+                <span class="brand-sub">School Portal</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-page="home" onclick="showPage('home')">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Dashboard</span>
+            </button>
+            <button class="nav-item" data-page="attendance" onclick="showPage('attendance')">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Attendance</span>
+            </button>
+            <button class="nav-item" data-page="maintenance" onclick="showPage('maintenance')">
+                <span class="nav-icon">🔧</span>
+                <span class="nav-label">Maintenance</span>
+            </button>
+            <button class="nav-item" data-page="settings" onclick="showPage('settings')">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">Settings</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-clock">
+            <div class="clock-time" id="clockTime">--:--:--</div>
+            <div class="clock-date" id="clockDate">--- --, ----</div>
+        </div>
+    </aside>
+
+    <!-- Mobile Top Bar -->
+    <header class="topbar">
+        <button class="hamburger" onclick="toggleSidebar()">☰</button>
+        <h2 id="pageTitle">Dashboard</h2>
+        <div class="topbar-clock" id="topbarClock"></div>
+    </header>
+
+    <!-- Overlay for mobile sidebar -->
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- ===== HOME PAGE ===== -->
+        <div id="home" class="page active">
+            <div class="page-header">
+                <h1 class="page-title">Good Morning 👋</h1>
+                <p class="page-subtitle">Here's what's happening at your school today.</p>
+            </div>
+
+            <div class="stats-grid" id="dashboardStats">
+                <!-- Populated by JS -->
+            </div>
+
+            <div class="content-row">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>📚 Marked Classes Today</h3>
+                    </div>
+                    <ul class="marked-list" id="markedClasses"></ul>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>⚡ Quick Actions</h3>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="action-card att" onclick="showPage('attendance')">
+                            <span class="action-icon">📋</span>
+                            <span>Mark Attendance</span>
+                        </button>
+                        <button class="action-card maint" onclick="showPage('maintenance')">
+                            <span class="action-icon">🔧</span>
+                            <span>Maintenance</span>
+                        </button>
+                        <button class="action-card set" onclick="showPage('settings')">
+                            <span class="action-icon">⚙️</span>
+                            <span>Manage Classes</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ATTENDANCE PAGE ===== -->
+        <div id="attendance" class="page">
+            <div class="page-header">
+                <h1 class="page-title">📋 Attendance</h1>
+                <p class="page-subtitle">Select a class to mark today's attendance.</p>
+            </div>
+            <div class="class-grid" id="classList"></div>
+        </div>
+
+        <!-- ===== ATTENDANCE FORM ===== -->
+        <div id="attendanceForm" class="page">
+            <div class="page-header">
+                <button class="back-btn" onclick="showPage('attendance')">← Back</button>
+                <h1 class="page-title" id="formClassName"></h1>
+            </div>
+            <div class="table-wrapper">
+                <div id="studentsList"></div>
+            </div>
+            <button class="btn btn-primary save-btn" onclick="saveAttendance()">💾 Save Attendance</button>
+        </div>
+
+        <!-- ===== MAINTENANCE PAGE ===== -->
+        <div id="maintenance" class="page">
+            <div class="page-header">
+                <h1 class="page-title">🔧 Maintenance</h1>
+            </div>
+            <div class="coming-soon">
+                <div class="coming-soon-icon">🚧</div>
+                <h2>Coming Soon</h2>
+                <p>This section is under development.</p>
+            </div>
+        </div>
+
+        <!-- ===== SETTINGS PAGE ===== -->
+        <div id="settings" class="page">
+            <div class="page-header">
+                <h1 class="page-title">⚙️ Settings</h1>
+                <p class="page-subtitle">Manage your classes and students.</p>
+            </div>
+
+            <div class="settings-grid">
+                <div class="panel">
+                    <div class="panel-header"><h3>➕ Add New Class</h3></div>
+                    <div class="form-group">
+                        <input type="text" id="newClassName" placeholder="e.g. Class 11-A" class="input-field">
+                        <button class="btn btn-success" onclick="addClass()">Add Class</button>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header"><h3>🗑️ Delete Class</h3></div>
+                    <div class="form-group">
+                        <select id="deleteClassSelect" class="input-field"></select>
+                        <button class="btn btn-danger" onclick="deleteClass()">Delete Class</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel" style="margin-top: 24px;">
+                <div class="panel-header"><h3>📚 All Classes</h3></div>
+                <div id="classManageList"></div>
+            </div>
+        </div>
+
+        <!-- ===== CLASS MANAGEMENT PAGE ===== -->
+        <div id="classManage" class="page">
+            <div class="page-header">
+                <button class="back-btn" onclick="showPage('settings')">← Back</button>
+                <h1 class="page-title" id="manageClassName"></h1>
+            </div>
+
+            <div class="panel" style="margin-bottom: 24px;">
+                <div class="panel-header"><h3>➕ Add Student</h3></div>
+                <div class="form-group">
+                    <input type="text" id="newStudentName" placeholder="Enter student name" class="input-field">
+                    <button class="btn btn-success" onclick="addStudent()">Add Student</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header"><h3>👥 Students List</h3></div>
+                <div id="studentsManageList"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
